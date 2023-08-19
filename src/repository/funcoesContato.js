@@ -1,23 +1,70 @@
 import conexao from "./conexao.js";
 
 export async function listarContatos(){
-    let sql = 'select * from tb_contatos'
+    let sql = `SELECT * FROM TB_CONTATOS`
     let [dados] = await conexao.query(sql)
 
     return dados
 }
 
 export async function inserirContato(contato){
-    let sql = 'insert into tb_contatos (nm_contato, ds_telefone, ds_email, bt_favorito, dt_cadastro) values (?, ?, ?, ?, ?)'
+    let sql = `INSERT INTO TB_CONTATOS (NM_CONTATO, DS_TELEFONE, DS_EMAIL, BT_FAVORITO, DT_CADASTRO) 
+                                VALUES (?, ?, ?, ?, ?)`
+                                
     let [dados] = await conexao.query(sql, [contato.nome, contato.telefone, contato.email, contato.favorito, contato.cadastro])
 
     return dados;
 }
 
-export async function buscarPornome(nome){
-    let sql = 'select * from tb_contatos where nm_contato like ?'
+export async function buscarPorNome(nome){
+    let sql = `SELECT * FROM TB_CONTATOS 
+                WHERE NM_CONTATO LIKE ?`
 
     let [dados] = await conexao.query(sql, ['%' + nome + '%'])
+
+    return dados;
+}
+
+export async function buscarFavoritos()
+{
+    let sql = `SELECT * FROM TB_CONTATOS
+                WHERE BT_FAVORITO = TRUE`
+
+    let [dados] = await conexao.query(sql);
+
+    return dados;
+}
+
+export async function buscarPorData(dataInicio, dataFim)
+{
+    let sql = `SELECT * FROM TB_CONTATOS
+                WHERE DT_CADASTRO BETWEEN ? AND ?`
+    
+    let [dados] = await conexao.query(sql, [dataInicio, dataFim]);
+    
+    return dados;
+}
+
+export async function alterarContato(newData, contatoID)
+{
+    let sql = `UPDATE TABLE TB_CONTATOS
+                  SET NM_CONTATO = ?,
+                      DS_TELEFONE = ?,
+                      DS_EMAIL = ?,
+                      BT_FAVORITO = ?,
+                      DT_CADASTRO = ?
+                WHERE ID_CONTATO = ?`
+
+    let [dados] = await conexao.query(sql, [newData.nome, newData.telefone, newData.email, newData.favorito, newData.cadastro, contatoID]);
+    return dados;
+}
+
+export async function deletarContato(contatoID)
+{
+    let sql = `DELETE FROM TB_CONTATOS
+                WHERE ID_CONTATO = ?`;
+
+    let [dados] = await conexao.query(sql, [contatoID]);
 
     return dados;
 }
