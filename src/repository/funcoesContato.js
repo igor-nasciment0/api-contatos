@@ -11,7 +11,7 @@ export async function inserirContato(contato){
     let sql = `INSERT INTO TB_CONTATOS (NM_CONTATO, DS_TELEFONE, DS_EMAIL, BT_FAVORITO, DT_CADASTRO) 
                                 VALUES (?, ?, ?, ?, ?)`
                                 
-    let [dados] = await conexao.query(sql, [contato.nome, contato.telefone, contato.email, contato.favorito, contato.cadastro])
+    let [dados] = await conexao.query(sql, [contato.nome, contato.telefone, contato.email, contato.favorito, contato.dataCadastro])
 
     return dados;
 }
@@ -47,22 +47,22 @@ export async function buscarPorData(dataInicio, dataFim)
 
 export async function alterarContato(newData, contatoID)
 {
-    let sql = `UPDATE TABLE TB_CONTATOS
+    let sql = `UPDATE TB_CONTATOS
                   SET NM_CONTATO = ?,
                       DS_TELEFONE = ?,
                       DS_EMAIL = ?,
                       BT_FAVORITO = ?,
                       DT_CADASTRO = ?
-                WHERE ID_CONTATO = ?`
+                WHERE ID_AGENDA = ?`
 
-    let [dados] = await conexao.query(sql, [newData.nome, newData.telefone, newData.email, newData.favorito, newData.cadastro, contatoID]);
+    let [dados] = await conexao.query(sql, [newData.nome, newData.telefone, newData.email, newData.favorito, newData.dataCadastro, contatoID]);
     return dados;
 }
 
 export async function deletarContato(contatoID)
 {
     let sql = `DELETE FROM TB_CONTATOS
-                WHERE ID_CONTATO = ?`;
+                WHERE ID_AGENDA = ?`;
 
     let [dados] = await conexao.query(sql, [contatoID]);
 

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { alterarContato, buscarFavoritos, buscarPorData, buscarPornome, deletarContato, inserirContato, listarContatos } from "../repository/funcoesContato.js";
+import { alterarContato, buscarFavoritos, buscarPorData, buscarPorNome, deletarContato, inserirContato, listarContatos } from "../repository/funcoesContato.js";
 
 let endpoints = Router();
 
@@ -18,7 +18,7 @@ endpoints.post('/contato', async (req, resp) => {
 endpoints.get('/contato/busca', async (req, resp) =>{
     let nome = req.query.nome;
 
-    let dados = await buscarPornome(nome);
+    let dados = await buscarPorNome(nome);
     resp.send(dados);
 })
 
@@ -43,15 +43,15 @@ endpoints.put('/contato/:id', async (req, resp) => {
 
     let dados = await alterarContato(newData, contatoID);
 
-    return dados;
+    resp.send(dados);
 })
 
-endpoints.delete('/contato/id', async (req, resp) => {
+endpoints.delete('/contato/:id', async (req, resp) => {
     let contatoID = req.params.id;
 
     let dados = await deletarContato(contatoID);
 
-    return dados;
+    resp.send(dados);
 })
 
 export default endpoints;
